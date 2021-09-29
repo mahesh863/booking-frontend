@@ -1,0 +1,10 @@
+.logo {
+  font-size: 40px;
+  font-weight: bold;
+  color: blue;
+}
+
+.menu {
+  float: right;
+  width: 50px;
+}

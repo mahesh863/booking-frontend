@@ -1,0 +1,29 @@
+.order-base {
+  height: 120px;
+  width: 100%;
+  border: 2px rgb(0, 0, 0) solid;
+  margin-top: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.prod-image {
+  height: 80px;
+  width: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.prod-name {
+  margin-left: 30px;
+  font-weight: bold;
+  font-size: 22px;
+}
+
+.booking-date {
+  margin-left: 30px;
+}

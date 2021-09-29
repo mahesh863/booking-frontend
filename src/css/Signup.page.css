@@ -1,0 +1,12 @@
+.base-div {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.container-div {
+  border: 2px solid black;
+  padding: 20px 30px;
+  border-radius: 10px;
+  margin-top: 100px;
+}
