@@ -23,6 +23,10 @@ import Footer from "./components/Footer";
 import { Provider } from "react-redux";
 import { store, persistor } from "./store";
 import { PersistGate } from "redux-persist/integration/react";
+import Select from "./pages/Select";
+import Admin from "./pages/Admin";
+import ProductByCategory from "./pages/ProductByCategory";
+import Product from "./pages/Product";
 
 const App = () => {
   return (
@@ -38,6 +42,14 @@ const App = () => {
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/payment" component={Payment} />
             <Route exact path="/orders" component={MyOrders} />
+            <Route exact path="/select" component={Select} />
+            <Route exact path="/admin" component={Admin} />
+            <Route exact path="/product/:id" component={Product} />
+            <Route
+              exact
+              path="/category/:id/:categoryName"
+              component={ProductByCategory}
+            />
             <Route path="*" component={PageNotFound} />
           </Switch>
         </Router>

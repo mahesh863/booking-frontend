@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input } from "reactstrap";
 import CategoryCard from "../components/CategoryCard";
 
@@ -12,21 +12,48 @@ import "../css/Home.page.css";
 //Redux
 import { connect } from "react-redux";
 import NotAutenticated from "../components/NotAutenticated";
+import { getCategories } from "../actions/categories";
+import { getNewProducts } from "../actions/products";
+import { searchForPorducts } from "../helpers/products";
 
-const Home = ({ userState, history }) => {
+const Home = ({
+  userState,
+  history,
+  getCategories,
+  categoryState,
+  getNewProducts,
+  productState,
+}) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const [displaySearch, setDisplaySearch] = useState(false);
+
   const handelSearchSubmit = (e) => {
     e.preventDefault();
-    console.log(">> Submitted!");
+
+    searchForPorducts(searchTerm)
+      .then((res) => {
+        setSearchResult(res.data.data);
+        setDisplaySearch(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        setDisplaySearch(false);
+      });
   };
 
   useEffect(() => {
     if (!userState.isAuthenticated) {
-      history.push("/signin");
+      // history.push("/signin");
+    } else {
+      getCategories();
+      getNewProducts();
     }
   }, []);
 
   return (
-    <div className="base-div container ">
+    <div className="base-div container" onClick={() => setDisplaySearch(false)}>
+      {console.log(productState)}
       {userState.isAuthenticated ? (
         <>
           <div className="search my-5">
@@ -37,37 +64,41 @@ const Home = ({ userState, history }) => {
                   onSubmit={(e) => handelSearchSubmit(e)}
                 >
                   <sapn className="input-div">
-                    <Input placeholder="Search..." />
+                    <Input
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      value={searchTerm}
+                      placeholder="Search..."
+                    />
                   </sapn>
                   <span className="form-button" onClick={handelSearchSubmit}>
                     Submit
                   </span>
                 </Form>
               </div>
-              {/* <div className="search-results">
-            <SearchResultCard />
-            <SearchResultCard />
-            <SearchResultCard />
-            <SearchResultCard />
-            <SearchResultCard />
-            <SearchResultCard />
-          </div> */}
+              {displaySearch && (
+                <div className="search-results">
+                  {searchResult.length === 0 ? (
+                    <span className="text-white">No Product Found!</span>
+                  ) : (
+                    searchResult.map((result) => <SearchResultCard />)
+                  )}
+                </div>
+              )}
             </div>
           </div>
           <div>
             <div>
               <h2 className="text-center">CATEGORIES</h2>
               <div className="category-section">
-                <CategoryCard />
-                <CategoryCard />
-                <CategoryCard />
-                <CategoryCard />
-                <CategoryCard />
-                <CategoryCard />
-                <CategoryCard />
-                <CategoryCard />
-                <CategoryCard />
-                <CategoryCard />
+                {categoryState.loading
+                  ? ""
+                  : categoryState.categories.map((cate) => (
+                      <CategoryCard
+                        name={cate.categoryName}
+                        id={cate.categoryId}
+                        history={history}
+                      />
+                    ))}
               </div>
             </div>
             <h2 className="text-center">FEATURED</h2>
@@ -92,15 +123,16 @@ const Home = ({ userState, history }) => {
             <h2 className="text-center">NEW ADDITIONS</h2>
 
             <div className="featured-section">
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
+              {productState.newLoading
+                ? ""
+                : productState.newAddedProducts.map((prods) => (
+                    <Porduct
+                      name={prods.productName}
+                      id={prods.productId}
+                      category={prods.category}
+                      price={prods.pricePerSeat}
+                    />
+                  ))}
             </div>
           </div>
         </>
@@ -113,6 +145,13 @@ const Home = ({ userState, history }) => {
 
 const mapStateToProps = (state) => ({
   userState: state.user,
+  categoryState: state.category,
+  productState: state.product,
 });
 
-export default connect(mapStateToProps)(Home);
+const mapDispatchToProps = {
+  getCategories: () => getCategories(),
+  getNewProducts: () => getNewProducts(),
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -1,0 +1,36 @@
+.product-image {
+  border-radius: 50%;
+  height: 200px;
+  width: 200px;
+  margin-right: 30px;
+}
+
+.prod-info-base {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.product-name {
+  font-weight: bold;
+  font-size: 25px;
+  margin-left: 20px;
+  margin-top: 40px;
+}
+
+.product-title {
+  margin-left: 20px;
+  color: rgba(70, 70, 70, 0.582);
+}
+
+.prod-address {
+  margin-left: 140px;
+  margin-top: 40px;
+  font-weight: bold;
+}
+
+.seats-div {
+  display: flex;
+  flex-wrap: wrap;
+}

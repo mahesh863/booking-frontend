@@ -26,3 +26,8 @@
   text-align: center;
   cursor: pointer;
 }
+
+.spinner-div {
+  display: flex;
+  justify-content: center;
+}

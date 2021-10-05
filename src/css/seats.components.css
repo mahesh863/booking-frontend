@@ -1,0 +1,52 @@
+.booked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  width: 80px;
+  border: 2px solid black;
+
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: rgb(255, 154, 154);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  align-items: center;
+  height: 80px;
+  width: 80px;
+  border: 2px solid black;
+
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: rgb(219, 227, 255);
+}
+
+.empty:hover {
+  background-color: rgb(219, 227, 255);
+  transform: scale(1.1);
+}
+
+.selected {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  width: 80px;
+  border: 2px solid black;
+
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: rgb(130, 255, 151);
+}
+
+.seat-icon {
+  font-size: 30px;
+  margin-top: 10px;
+}

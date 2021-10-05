@@ -2,10 +2,14 @@ import React from "react";
 
 import "../css/CategoryCard.component.css";
 
-const CategoryCard = () => {
+const CategoryCard = ({ name, id, history }) => {
+  const handelClick = () => {
+    history.push(`/category/${id}/${name}`);
+  };
+
   return (
-    <div className="base-category">
-      <p className="cate-name"> Category Name </p>
+    <div className="base-category" onClick={handelClick}>
+      <p className="cate-name"> {name} </p>
     </div>
   );
 };

@@ -10,6 +10,7 @@ const middleware = [thunk];
 const persistConfig = {
   key: "root",
   storage,
+  blacklist: ["admin"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

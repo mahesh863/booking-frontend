@@ -13,10 +13,15 @@ import {
   NavLink,
 } from "reactstrap";
 import { connect } from "react-redux";
+import { signout } from "../actions/user";
 
-const Header = ({ userState }) => {
+const Header = ({ userState, signout }) => {
   const [collapsed, setCollapsed] = useState(true);
   const toggleNavbar = () => setCollapsed(!collapsed);
+
+  const handelLogout = () => {
+    signout();
+  };
 
   return (
     <div className="container ">
@@ -42,17 +47,20 @@ const Header = ({ userState }) => {
                   <NavItem>
                     <NavLink href="/">Home</NavLink>
                   </NavItem>
-
                   <NavItem>
                     <NavLink href="/orders"> My Bookings</NavLink>
                   </NavItem>
-
-                  <NavItem>
-                    <NavLink href="/profile"> My Profile </NavLink>
-                  </NavItem>
-
-                  <NavItem>
-                    <NavLink href="/categories"> Categories</NavLink>
+                  <NavItem className="my-2">
+                    <span
+                      className="button my-2 logout-button"
+                      style={{
+                        borderRadius: "10px",
+                        backgroundColor: "#BF3312",
+                      }}
+                      onClick={handelLogout}
+                    >
+                      Logout
+                    </span>
                   </NavItem>
                 </>
               )}
@@ -68,4 +76,8 @@ const mapStateToProps = (state) => ({
   userState: state.user,
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = {
+  signout: () => signout(),
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
