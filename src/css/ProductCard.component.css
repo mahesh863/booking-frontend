@@ -1,6 +1,6 @@
 .product-card-base {
   width: 240px;
-  height: 300px;
+  min-height: 30px;
   border: 2px black solid;
   border-radius: 10px;
 }

@@ -5,16 +5,17 @@ import CategoryCard from "../components/CategoryCard";
 //Components
 import Porduct from "../components/PorductCard";
 import SearchResultCard from "../components/SearchResultCard";
+import NotAutenticated from "../components/NotAutenticated";
 
 //Css
 import "../css/Home.page.css";
 
 //Redux
-import { connect } from "react-redux";
-import NotAutenticated from "../components/NotAutenticated";
+import { connect, useDispatch } from "react-redux";
 import { getCategories } from "../actions/categories";
-import { getNewProducts } from "../actions/products";
+import { featuredProducts, getNewProducts } from "../actions/products";
 import { searchForPorducts } from "../helpers/products";
+import { SELECT_SEATS } from "../actions/action.type";
 
 const Home = ({
   userState,
@@ -23,10 +24,12 @@ const Home = ({
   categoryState,
   getNewProducts,
   productState,
+  featuredProducts,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [displaySearch, setDisplaySearch] = useState(false);
+  const dispatch = useDispatch();
 
   const handelSearchSubmit = (e) => {
     e.preventDefault();
@@ -44,10 +47,15 @@ const Home = ({
 
   useEffect(() => {
     if (!userState.isAuthenticated) {
-      // history.push("/signin");
+      history.push("/signin");
     } else {
       getCategories();
       getNewProducts();
+      featuredProducts();
+      dispatch({
+        type: SELECT_SEATS,
+        dispatch: [],
+      });
     }
   }, []);
 
@@ -80,7 +88,13 @@ const Home = ({
                   {searchResult.length === 0 ? (
                     <span className="text-white">No Product Found!</span>
                   ) : (
-                    searchResult.map((result) => <SearchResultCard />)
+                    searchResult.map((result) => (
+                      <SearchResultCard
+                        name={result.productName}
+                        id={result.productId}
+                        image={result.productImage}
+                      />
+                    ))
                   )}
                 </div>
               )}
@@ -103,17 +117,19 @@ const Home = ({
             </div>
             <h2 className="text-center">FEATURED</h2>
             <div className="featured-section">
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
-              <Porduct />
+              {productState.featuredProducts ? (
+                productState.featuredProducts.map((prods) => (
+                  <Porduct
+                    name={prods.productName}
+                    id={prods.productId}
+                    category={prods.category}
+                    price={prods.pricePerSeat}
+                    image={prods.productImage}
+                  />
+                ))
+              ) : (
+                <p>No Product Found!</p>
+              )}
             </div>
           </div>
           <div className="border" />
@@ -131,6 +147,7 @@ const Home = ({
                       id={prods.productId}
                       category={prods.category}
                       price={prods.pricePerSeat}
+                      image={prods.productImage}
                     />
                   ))}
             </div>
@@ -152,6 +169,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   getCategories: () => getCategories(),
   getNewProducts: () => getNewProducts(),
+  featuredProducts: () => featuredProducts(),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

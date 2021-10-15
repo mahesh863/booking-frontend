@@ -44,3 +44,10 @@ export const searchProductsById = (id) => {
     },
   });
 };
+
+export const getFeaturedProducts = () => {
+  return axios({
+    url: `${API}/featured/products`,
+    method: "GET",
+  });
+};

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Form, FormGroup, Label, Input } from "reactstrap";
+import { Form, FormGroup, Label, Input, Spinner } from "reactstrap";
 
 //css
 import "../css/Admin.page.css";
@@ -25,11 +25,14 @@ const Admin = ({ getCategories, categoryState, adminState, getAllProduct }) => {
 
   //Product
   const [productName, setProductName] = useState("");
+  const [productImage, setProductImage] = useState("");
   const [productCategory, setProductCategory] = useState("");
   const [productAddress, setProductAddress] = useState("");
   const [totalNoOfSeats, setTotalNoOfSeats] = useState("");
   const [priceOfEachSeat, setPriceOfEachSeat] = useState("");
   const [deleteProductId, setDeleteProductId] = useState("");
+  const [addProductLoading, setAddProductLoading] = useState(false);
+  const [isFeatured, setIsFeatured] = useState(false);
 
   //Create Seats
   const [todaysDate, setTodaysDate] = useState("");
@@ -42,9 +45,6 @@ const Admin = ({ getCategories, categoryState, adminState, getAllProduct }) => {
   };
 
   const handelCreateSeats = () => {
-    // var showTimestamp = parseInt(
-    //   (new Date(showDate).getTime() / 1000).toFixed(0)
-    // );
     createSeats(productId, showTime, showDate)
       .then((res) => {
         setProductId("");
@@ -172,7 +172,8 @@ const Admin = ({ getCategories, categoryState, adminState, getAllProduct }) => {
       !productCategory ||
       !priceOfEachSeat ||
       !totalNoOfSeats ||
-      !productName
+      !productName ||
+      !productImage
     ) {
       toast.warn("Please Enter All Fields!", {
         position: "top-right",
@@ -187,19 +188,25 @@ const Admin = ({ getCategories, categoryState, adminState, getAllProduct }) => {
       return;
     }
 
-    addProduct(
-      productName,
-      productAddress,
-      totalNoOfSeats,
-      priceOfEachSeat,
-      productCategory
-    )
+    setAddProductLoading(true);
+    const formData = new FormData();
+    formData.append("productName", productName);
+    formData.append("productAddress", productAddress);
+    formData.append("totalNumberOfSeats", totalNoOfSeats);
+    formData.append("pricePerSeat", priceOfEachSeat);
+    formData.append("category", productCategory);
+    formData.append("productImage", productImage, productImage.name);
+    formData.append("isFeatured", isFeatured);
+
+    addProduct(formData)
       .then((res) => {
         setProductName("");
         setProductAddress("");
         setProductCategory("");
         setTotalNoOfSeats("");
         setPriceOfEachSeat("");
+        setProductImage("");
+        setAddProductLoading(false);
 
         toast.success(res.data.message, {
           position: "top-right",
@@ -212,6 +219,8 @@ const Admin = ({ getCategories, categoryState, adminState, getAllProduct }) => {
         });
       })
       .catch((err) => {
+        setAddProductLoading(false);
+
         console.log(err);
         toast.error("Failed To Add Product!", {
           position: "top-right",
@@ -280,6 +289,7 @@ const Admin = ({ getCategories, categoryState, adminState, getAllProduct }) => {
   };
 
   const handelDeleteProduct = () => {
+    console.log(deleteProductId);
     if (!deleteProductId) {
       toast.warn("Please Select Product TO Delete !", {
         position: "top-right",
@@ -296,7 +306,8 @@ const Admin = ({ getCategories, categoryState, adminState, getAllProduct }) => {
 
     deleteProduct(deleteProductId)
       .then((res) => {
-        toast.success(res.data.message, {
+        window.location.reload();
+        toast.success("Product Deleted Successfully!", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -328,7 +339,7 @@ const Admin = ({ getCategories, categoryState, adminState, getAllProduct }) => {
 
   return (
     <div className="container">
-      {console.log(adminState)}
+      {console.log(isFeatured)}
       <div className="row">
         <div className="col-6 col-base">
           <h2 className="text-center"> Category</h2>
@@ -441,9 +452,24 @@ const Admin = ({ getCategories, categoryState, adminState, getAllProduct }) => {
         <div className="col-6 col-base">
           <h2 className="text-center"> Product</h2>
 
+          {/* Create Product */}
           <div className="my-5 border p-3 ">
             <h2 className="text-center">Create Product</h2>
+
             <Form>
+              <FormGroup>
+                <Label className="form-label">Product Image</Label>
+
+                <div>
+                  <Input
+                    type="file"
+                    className="form-input"
+                    name="file"
+                    onChange={(e) => setProductImage(e.target.files[0])}
+                  />
+                </div>
+              </FormGroup>
+
               <FormGroup>
                 <Label className="form-label">Product Name</Label>
                 <Input
@@ -505,12 +531,81 @@ const Admin = ({ getCategories, categoryState, adminState, getAllProduct }) => {
                   onChange={(e) => setPriceOfEachSeat(e.target.value)}
                 />
               </FormGroup>
-            </Form>
 
-            <div className="button" onClick={handelAddProduct}>
-              {" "}
-              Add Product{" "}
-            </div>
+              <FormGroup>
+                <Input
+                  type="checkbox"
+                  value={isFeatured}
+                  onChange={(e) => setIsFeatured(!isFeatured)}
+                />
+                <Label>Is Featured</Label>
+              </FormGroup>
+
+              {addProductLoading ? (
+                <div
+                  style={{
+                    height: "20px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <Spinner> </Spinner>
+                </div>
+              ) : (
+                <div className="button" onClick={handelAddProduct}>
+                  Add Product
+                </div>
+              )}
+            </Form>
+          </div>
+
+          {/* Delete Product */}
+          <div className="my-3 border p-3">
+            <h2 className="text-center">Delete Product</h2>
+            {!adminState.allProducts ? (
+              <div
+                className="button"
+                style={{ borderRadius: "10px" }}
+                onClick={handelGetAllProducts}
+              >
+                Get All Products
+              </div>
+            ) : (
+              <Form>
+                <FormGroup>
+                  <Label className="form-label">Select Product</Label>
+
+                  <Input
+                    type="select"
+                    className="form-input"
+                    value={deleteProductId}
+                    onChange={(e) => setDeleteProductId(e.target.value)}
+                  >
+                    <option value=""> </option>
+                    {adminState.allProducts.map((prods) => (
+                      <option value={prods.productId}>
+                        {prods.productName}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
+
+                <div
+                  className="button"
+                  style={{
+                    backgroundColor: "red",
+                    color: "black",
+                    fontWeight: "bold",
+                  }}
+                  onClick={handelDeleteProduct}
+                >
+                  {" "}
+                  Delete{" "}
+                </div>
+              </Form>
+            )}
           </div>
         </div>
       </div>

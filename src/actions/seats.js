@@ -1,15 +1,21 @@
 import { getSeats } from "../helpers/seats";
-import { ERROR_SEAT, GET_SEATS } from "./action.type";
+import {
+  ERROR_SEAT,
+  GET_SEATS,
+  REMOVE_SEATS,
+  SELECT_SEATS,
+} from "./action.type";
 
 export const getAllSeats = (data) => (dispatch) => {
   const { id, date } = data;
-  console.log(id);
-  console.log(date);
   getSeats(id, date)
     .then((res) => {
+      let seats = res.data.data.sort((a, b) => {
+        return a.seatNumber - b.seatNumber;
+      });
       dispatch({
         type: GET_SEATS,
-        payload: res.data.data,
+        payload: seats,
       });
     })
     .catch((err) => {
@@ -19,4 +25,18 @@ export const getAllSeats = (data) => (dispatch) => {
         payload: true,
       });
     });
+};
+
+export const selectSeats = (data) => (dispatch) => {
+  dispatch({
+    type: SELECT_SEATS,
+    payload: data,
+  });
+};
+
+export const removeSeats = (id) => (dispatch) => {
+  dispatch({
+    type: REMOVE_SEATS,
+    payload: id,
+  });
 };

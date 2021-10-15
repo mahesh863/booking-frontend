@@ -4,6 +4,7 @@ import {
   getProductsByCategory,
   getNewAddedProducts,
   searchProductsById,
+  getFeaturedProducts,
 } from "../helpers/products";
 import {
   ERROR_PRODUCT,
@@ -11,6 +12,7 @@ import {
   NEW_ADDED_PRODUCTS,
   GET_PRODUCT_ID,
   ERROR_PRODUCT_ID,
+  FEATURED_PRODUCTS,
 } from "./action.type";
 
 export const getProducts = () => (dispatch) => {
@@ -80,6 +82,7 @@ export const getNewProducts = () => (dispatch) => {
 export const getProductById = (id) => (dispatch) => {
   searchProductsById(id)
     .then((res) => {
+      console.log(res);
       dispatch({
         type: GET_PRODUCT_ID,
         payload: res.data.data,
@@ -91,5 +94,18 @@ export const getProductById = (id) => (dispatch) => {
         type: ERROR_PRODUCT_ID,
         payload: true,
       });
+    });
+};
+
+export const featuredProducts = () => (dispatch) => {
+  getFeaturedProducts()
+    .then((res) => {
+      dispatch({
+        type: FEATURED_PRODUCTS,
+        payload: res.data.data,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };

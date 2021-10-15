@@ -13,12 +13,17 @@ export const NEW_ADDED_PRODUCTS = "NEW_ADDED_PRODUCTS";
 export const NEW_ADDED_ERROR = "NEW_ADDED_ERROR";
 export const GET_PRODUCT_ID = "GET_PRODUCT_ID";
 export const ERROR_PRODUCT_ID = "ERROR_PRODUCT_ID";
+export const FEATURED_PRODUCTS = "FEATURED_PRODUCTS";
 
 //Seats
 export const SELECT_SEATS = "SELECT_SEATS";
+export const REMOVE_SEATS = "REMOVE_SEATS";
 export const GET_SEATS = "GET_SEATS";
 export const ERROR_SEAT = "ERROR_SEAT";
 
 //Admin
 export const GET_ALL_PRODUCTS = "GET_ALL_PRODUCTS";
 export const ERROR_GETTING_ALL_PRODUCTS = "ERROR_GETTING_ALL_PRODUCTS";
+
+//Loading
+export const PAYMENT_LOADING = "PAYMENT_LOADING";

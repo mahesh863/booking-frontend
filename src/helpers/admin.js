@@ -32,17 +32,11 @@ export const deleteCategory = (categoryId) => {
   });
 };
 
-export const addProduct = (name, address, seats, price, category) => {
+export const addProduct = (productDetails) => {
   return axios({
     method: "POST",
     url: `${API}/create`,
-    data: {
-      productName: name,
-      productAddress: address,
-      totalNumberOfSeats: seats,
-      pricePerSeat: price,
-      category: category,
-    },
+    data: productDetails,
   });
 };
 
@@ -61,7 +55,7 @@ export const editProduct = (name, address, seats, price, category) => {
 };
 
 export const deleteProduct = (id) => {
-  axios({
+  return axios({
     method: "DELETE",
     url: `${API}/delete`,
     data: {

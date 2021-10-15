@@ -27,6 +27,9 @@ import Select from "./pages/Select";
 import Admin from "./pages/Admin";
 import ProductByCategory from "./pages/ProductByCategory";
 import Product from "./pages/Product";
+import Book from "./pages/Book";
+import Success from "./pages/Success";
+import Failed from "./pages/Failed";
 
 const App = () => {
   return (
@@ -44,6 +47,9 @@ const App = () => {
             <Route exact path="/orders" component={MyOrders} />
             <Route exact path="/select" component={Select} />
             <Route exact path="/admin" component={Admin} />
+            <Route exact path="/book" component={Book} />
+            <Route exact path="/failed" component={Failed} />
+            <Route exact path="/success" component={Success} />
             <Route exact path="/product/:id" component={Product} />
             <Route
               exact

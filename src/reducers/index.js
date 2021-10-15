@@ -4,6 +4,7 @@ import category from "./category";
 import product from "./products";
 import seats from "./seats";
 import admin from "./admin";
+import paymentLoading from "./paymentLoading";
 
 export default combineReducers({
   user,
@@ -11,4 +12,5 @@ export default combineReducers({
   product,
   seats,
   admin,
+  paymentLoading,
 });

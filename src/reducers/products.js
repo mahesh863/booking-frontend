@@ -5,6 +5,7 @@ import {
   NEW_ADDED_ERROR,
   GET_PRODUCT_ID,
   ERROR_PRODUCT_ID,
+  FEATURED_PRODUCTS,
 } from "../actions/action.type";
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
   newAddedError: false,
   productById: "",
   errorProductById: false,
+  featuredProducts: "",
 };
 
 const product = (state = initialState, action) => {
@@ -65,6 +67,11 @@ const product = (state = initialState, action) => {
         error: true,
       };
 
+    case FEATURED_PRODUCTS:
+      return {
+        ...state,
+        featuredProducts: action.payload,
+      };
     default:
       return state;
   }

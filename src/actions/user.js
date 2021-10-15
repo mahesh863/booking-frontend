@@ -55,7 +55,7 @@ export const signin = (data) => (dispatch) => {
         payload: res.data,
       });
 
-      history.push("/");
+      history.goBack();
     })
     .catch((err) => {
       if (!err.response.data.err) {

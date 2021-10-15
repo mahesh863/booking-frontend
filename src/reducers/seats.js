@@ -1,4 +1,9 @@
-import { SELECT_SEATS, GET_SEATS, ERROR_SEAT } from "../actions/action.type";
+import {
+  SELECT_SEATS,
+  GET_SEATS,
+  ERROR_SEAT,
+  REMOVE_SEATS,
+} from "../actions/action.type";
 
 const initialState = {
   loading: true,
@@ -12,9 +17,15 @@ const seats = (state = initialState, action) => {
     case SELECT_SEATS:
       return {
         ...state,
-        loading: false,
-        seats: seats.append(action.payload),
-        error: false,
+        selectedSeats: [...state.selectedSeats, action.payload],
+      };
+
+    case REMOVE_SEATS:
+      return {
+        ...state,
+        selectedSeats: state.selectedSeats.filter(
+          (val) => val.id !== action.payload
+        ),
       };
 
     case GET_SEATS:
