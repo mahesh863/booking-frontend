@@ -1,4 +1,4 @@
-# This app has been made with React , Node and PostgreSQL
+# This app has been made with React , Node, Redux and PostgreSQL
 
 
 ## Backend Codes Can be Found Here
